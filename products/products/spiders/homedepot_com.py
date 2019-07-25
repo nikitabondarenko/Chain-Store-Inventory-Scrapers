@@ -42,7 +42,7 @@ class HomedepotComSpider(CrawlSpider):
 
 
     def parse_item(self, response):
-    #def parse(self, response):
+#    def parse(self, response):
         hxs = Selector(response)
         l = HomedepotComItemLoader(item = ProductItem(), response = response)
 
@@ -77,6 +77,7 @@ class HomedepotComSpider(CrawlSpider):
         l.add_xpath("brand", ".//div[contains(@class, 'sticky_brand_info')]/text()")
         l.add_xpath("name", ".//h1[contains(@class, 'title')]/text()")
         l.add_xpath("sku", ".//*[@id='product_internet_number']/text()")
+        l.add_xpath("upc", ".//upc/text()")
         l.add_xpath("orig_thumbnail_url", ".//img[@id='mainImage']/@src")
         l.add_xpath("price", ".//*[@id='ajaxPrice']/@content")
 
