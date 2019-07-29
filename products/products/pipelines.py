@@ -22,6 +22,7 @@ SITE_ID_STAPLES_COM = 7
 SITE_ID_HOMEDEPOT_COM = 8
 SITE_ID_BEDBATHANDBEYOND_COM = 9
 SITE_ID_BARNESANDNOBLE_COM = 10
+SITE_ID_PETCO_COM = 11
 
         
 SPIDERS_UNESCAPE_NAME = ["target_com", "bedbathandbeyond_com"]
@@ -106,6 +107,14 @@ class BarnesandnobleComPipeline(object):
         if "barnesandnoble_com" == spider.name:
             item["site_type_id"] = SITE_ID_BARNESANDNOBLE_COM
             item["in_store"] = 1
+
+        return item
+
+
+class PetcoComPipeline(object):
+    def process_item(self, item, spider):
+        if "petco_com" == spider.name:
+            item["site_type_id"] = SITE_ID_PETCO_COM
 
         return item
 
