@@ -36,6 +36,9 @@ class HomedepotComSpider(CrawlSpider):
     ]
     rules = (
         Rule(LinkExtractor(restrict_xpaths=(".//div[@class='content']//ul")), follow=True),
+        Rule(LinkExtractor(restrict_xpaths=(".//div[@class='content']//p")), follow=True),
+        Rule(LinkExtractor(restrict_xpaths=(".//div[@class='content']//h3")), follow=True),
+        Rule(LinkExtractor(restrict_xpaths=(".//div[@class='content']//li")), follow=True),
         Rule(LinkExtractor(restrict_xpaths=(".//nav[@role='navigation']")), follow=True),
         Rule(LinkExtractor(restrict_xpaths=(".//div[@data-component='productpod']//div[contains(@class, 'description')]")), callback="parse_item"),
     )

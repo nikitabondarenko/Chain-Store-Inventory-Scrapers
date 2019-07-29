@@ -73,17 +73,17 @@ class BedbathandbeyondComSpider(CrawlSpider):
         #"https://www.bedbathandbeyond.com/store/product/sure-fit-reg-stretch-stripe-ottoman-slipcover/3246898",
 #        "https://www.bedbathandbeyond.com/store/product/bridge-street-3-piece-marble-twist-lamp-set-with-cfl-bulbs/1017229630",
     ]
-#    custom_settings = {
+    custom_settings = {
 #        "USER_AGENT": "Mozilla/5.0 (X11; Linux x86_64…) Gecko/20100101 Firefox/60.0",
-#        "COOKIES_ENABLED": False,
-#        "DOWNLOAD_DELAY": 10,
-#        "CONCURRENT_REQUESTS": 1,
+        "COOKIES_ENABLED": False,
+        "DOWNLOAD_DELAY": 1,
+        "CONCURRENT_REQUESTS": 1,
 #        "DOWNLOADER_MIDDLEWARES": {
 #            'products.basic_middlewares.user_agent_middleware.RandomUserAgentMiddleware': 400,
 #            'products.basic_middlewares.proxy_middleware.ProxyMiddleware': 410,
 #            'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None
 #         }
-#    }
+    }
     
     
 #    """
