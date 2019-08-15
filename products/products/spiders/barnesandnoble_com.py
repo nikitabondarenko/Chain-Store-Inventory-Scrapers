@@ -19,9 +19,6 @@ class BarnesandnobleComItemLoader(ItemLoader):
     default_input_processor = MapCompose(lambda x: x.strip())
     default_output_processor = Compose(TakeFirst(), lambda x: x.strip())
     default_selector_class = Selector
-    menu_name_out = Compose(lambda x: x[0] if 0 < len(x) else None, lambda x: x.strip())
-    category_name_out = Compose(lambda x: x[1] if 1 < len(x) else None, lambda x: x.strip())
-    subcategory_name_out = Compose(lambda x: x[2] if 2 < len(x) else None, lambda x: x.strip())
     category_path_out = Compose(Join(pipelines.DELIMITER_CATEGORY_PATH))
     brand_out = Compose(Join(), lambda x: x.strip())
     orig_thumbnail_url_out = Compose(TakeFirst(), lambda x: "https:" + x.strip())
@@ -43,7 +40,7 @@ class BarnesandnobleComSpider(CrawlSpider):
         "https://www.barnesandnoble.com/b/gift-home-office/_/N-8qg",
         "https://www.barnesandnoble.com/b/movies-tv/_/N-8qh",
         "https://www.barnesandnoble.com/b/music/_/N-8qi",
-#        "https://www.barnesandnoble.com/w/where-the-crawdads-sing-delia-owens/1127681226?ean=9780735219090#/",
+#        "https://www.barnesandnoble.com/w/bluest-eye-toni-morrison/1100608830"
     ]
     rules = (
         Rule(LinkExtractor(restrict_xpaths=(".//div[@id='refinements']")), follow=True),
@@ -59,23 +56,27 @@ class BarnesandnobleComSpider(CrawlSpider):
 
         l.add_value("url", response.url)
 
-        categories = hxs.xpath(".//nav[@role='navigation']//li/a/text()").extract()
-        
-        if categories:
-            categories = categories[1:]
 
-        if categories:
-            l.add_value("menu_name", categories)
-            l.add_value("category_name", categories)
-            l.add_value("subcategory_name", categories)
-            l.add_value("category_path", categories)
+        categories_data = hxs.xpath(".//input[@id='gptAdsVal']/@value").extract_first()
+        
+        if categories_data:
+            menu_name = utils.regex_extractor(ur"cat1:(.+?);", categories_data, 1)
+            category_name = utils.regex_extractor(ur"cat2:(.+?);", categories_data, 1)
+            subcategory_name = utils.regex_extractor(ur"cat3:(.+?);", categories_data, 1)
+  
+            l.add_value("menu_name", menu_name)
+            l.add_value("category_name", category_name)
+            l.add_value("subcategory_name", subcategory_name)
+
+            l.add_value("category_path", menu_name)
+            l.add_value("category_path", category_name)
+            l.add_value("category_path", subcategory_name)
         
         l.add_xpath("name", ".//h1[@itemprop='name']/text()")
         l.add_xpath("price", ".//span[@id='pdp-cur-price']/text()")
         l.add_xpath("brand", ".//div[@id='ProductDetailsTab']//th[normalize-space(.)='Publisher:']/parent::tr/td//text()")
         l.add_xpath("sku", ".//div[@id='prodPromo']//a/@data-sku-id")
         l.add_xpath("upc", ".//div[@id='prodPromo']//a/@data-sku-id")
-#        l.add_xpath("upc", ".//div[@id='ProductDetailsTab']//th[normalize-space(.)='ISBN-13:']/parent::tr/td//text()")
         l.add_xpath("orig_thumbnail_url", ".//div[@class='pdp-product-image-container']//img[@id='pdpMainImage']/@src")
 
         authors = hxs.xpath(".//span[@itemprop='author']/text()").extract()
