@@ -23,6 +23,9 @@ SITE_ID_HOMEDEPOT_COM = 8
 SITE_ID_BEDBATHANDBEYOND_COM = 9
 SITE_ID_BARNESANDNOBLE_COM = 10
 SITE_ID_PETCO_COM = 11
+SITE_ID_WHOLEFOODS_COM = 12
+SITE_ID_OREILLYAUTO_COM = 13
+
 
         
 SPIDERS_UNESCAPE_NAME = ["target_com", "bedbathandbeyond_com"]
@@ -97,6 +100,12 @@ class BedbathandbeyondComPipeline(object):
 
     def process_item(self, item, spider):
         if "bedbathandbeyond_com" == spider.name:
+            in_store = item.get("in_store", None)
+
+            # if in_store is empyt - in_store=0
+            if None == in_store:
+                item["in_store"] = 0
+
             item["site_type_id"] = SITE_ID_BEDBATHANDBEYOND_COM
 
         return item
@@ -107,6 +116,22 @@ class BarnesandnobleComPipeline(object):
         if "barnesandnoble_com" == spider.name:
             item["site_type_id"] = SITE_ID_BARNESANDNOBLE_COM
             item["in_store"] = 1
+
+        return item
+
+
+class OreillyautoComPipeline(object):
+    def process_item(self, item, spider):
+        if "oreillyauto_com" == spider.name:
+            item["site_type_id"] = SITE_ID_OREILLYAUTO_COM
+
+        return item
+
+
+class WholefoodsComPipeline(object):
+    def process_item(self, item, spider):
+        if "wholefoods_com" == spider.name:
+            item["site_type_id"] = SITE_ID_WHOLEFOODS_COM
 
         return item
 
